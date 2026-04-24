@@ -30,3 +30,4 @@ Each skill is a **directory** containing a `SKILL.md` file.
 | Skill | Directory | Trigger |
 |---|---|---|
 | Manage Agent Skills | [`manage-agent-skills/`](manage-agent-skills/) | When creating or updating a skill in `.agents/skills/` |
+| Tidy Up | [`tidy-up/`](tidy-up/) | Before starting new work or as a standalone cleanup — scan for stale branches, worktrees, stashes, and WIP; recommend isolate / consolidate / purge; execute only on explicit human approval |
