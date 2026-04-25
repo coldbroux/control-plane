@@ -6,11 +6,11 @@
 
 - `pbi_id`: `pbi-candidate-terms-70dd`
 - `title`: `Candidate Terms — A Memory Layer for Semantic Discovery`
-- `status`: `Proposed`
+- `status`: `InProgress`
 - `repos`:
   - `peddlerr`
 - `created_at`: `2026-04-25 15:21:39`
-- `updated_at`: `2026-04-25 15:21:39`
+- `updated_at`: `2026-04-25 16:05:00`
 
 ## Overview
 
