@@ -26,6 +26,7 @@ This document lists all tasks associated with pbi-candidate-terms-70dd.
 | 6 | `reconcile-canonical-language skill update for Q8` (`6.md`) | Proposed | Update the skill and slash-command mirror to run Q8 at Check 2 and operate over the accumulated candidate set. |
 | 7 | `Backfill 38 Adena deferrals` (`7.md`) | Proposed | Insert deferred-status candidate rows + Adena observations for the 38 terms identified during pbi-research-orch-2e0b Task 8 E2E. |
 | 8 | `E2E validation of accumulating candidate set` (`8.md`) | Proposed | Re-run Phase 2 to confirm prior rationale surfaces, recording is idempotent, and Q8 partitions correctly across runs. |
+| 9 | `Two-system E2E validation — canonical language convergence` (`9.md`) | Proposed | Run two health systems through Phase 1 + Phase 2 end-to-end and verify that cross-source convergence is observable (or documented as absent) in the canonical concept tree. |
 
 ## Notes
 

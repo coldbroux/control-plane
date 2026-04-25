@@ -20,7 +20,7 @@ This PBI introduces a persistent candidate-term system that allows semantic disc
 
 > A candidate term represents a possible future canonical concept, derived from one or more source vocabulary observations. Candidate terms accumulate across discovery runs and provide the review surface for deciding whether a source-derived term should be promoted, merged, rejected, or deferred.
 
-Candidate terms are **not** canonical concepts. They are a modeling memory layer that allows Brian's language to emerge through comparison across source systems. Therefore:
+Candidate terms are **not** canonical concepts. They are a modeling memory layer that allows the canonical language to emerge through comparison across source systems. Therefore:
 
 - Candidate terms may be source-derived.
 - Canonical concepts should be source-neutral.
@@ -40,7 +40,7 @@ The architectural contradiction: a skill meant to operate over accumulated cross
 
 ## User Stories
 
-- **Operator (Brian):** As the operator of the canonical language, I want to see which terms have been deferred across multiple health systems so that I can identify cross-source convergence and decide when to promote.
+- **Operator:** As the operator of the canonical language, I want to see which terms have been deferred across multiple health systems so that I can identify cross-source convergence and decide when to promote.
 - **Phase 2 agent:** As the reconcile-canonical-language skill, I want prior deferral rationale surfaced when I encounter a previously-seen term so that I do not redo evaluations from scratch.
 - **Future operator:** As someone reading the canonical concept tree, I want to trace the origin of any concept back to the source observations that justified its promotion so that the canonical language remains auditable.
 
@@ -72,7 +72,7 @@ The architectural contradiction: a skill meant to operate over accumulated cross
 - **Wave 0:** Task 1 — schema migration. Blocking for everything downstream.
 - **Wave 1:** Tasks 2, 3, 4, 5, 6 — Q8 diagnostic, recording script, promotion script update, obsolete sweep, skill update. All depend only on the schema and can run in parallel.
 - **Wave 2:** Task 7 — backfill 38 Adena deferrals. Depends on Tasks 1 and 3.
-- **Wave 3:** Task 8 — E2E validation against a follow-up Phase 2 run.
+- **Wave 3:** Tasks 8, 9 — validation. Task 8 covers mechanics and lifecycle correctness against fixtures; Task 9 covers two-system end-to-end behavior against the live canonical language.
 
 ## UX/UI Considerations
 
@@ -94,6 +94,7 @@ The architectural contradiction: a skill meant to operate over accumulated cross
 9. The 38 Adena deferrals from `pbi-research-orch-2e0b` Task 8 are backfilled as `status='deferred'` candidates with one observation each; cross-source count is 1 for all.
 10. Obsolete sweep correctly transitions deferred candidates whose observations reference no `is_current` version.
 11. No deletion of candidate or observation rows under any normal operation.
+12. Two health systems have been run end-to-end through the candidate-terms pipeline (Phase 1 + Phase 2). The resulting candidate-set partition by `cross_source_count` is captured in the Task 9 PR description, and any cross-source convergence (or absence thereof) is documented with the queries used to verify.
 
 ## Dependencies
 
@@ -126,3 +127,4 @@ The architectural contradiction: a skill meant to operate over accumulated cross
 - [Task 6: reconcile-canonical-language skill update for Q8](mdc:6.md)
 - [Task 7: Backfill 38 Adena deferrals](mdc:7.md)
 - [Task 8: E2E validation of accumulating candidate set](mdc:8.md)
+- [Task 9: Two-system E2E validation — canonical language convergence](mdc:9.md)

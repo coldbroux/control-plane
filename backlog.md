@@ -6,7 +6,7 @@ This document contains all PBIs for the project, ordered by priority.
 
 | ID | Actor | User Story | Status | Conditions of Satisfaction (CoS) |
 |:---|:------|:-----------|:-------|:----------------------------------|
-| pbi-candidate-terms-70dd | Operator | As the operator of the canonical language, I want a persistent candidate-term layer so that semantic discovery accumulates across runs, cross-source convergence becomes queryable, and promotion into Brian's language is grounded in evidence rather than transient agent judgment. | Proposed | `pbis/pbi-candidate-terms-70dd/prd.md` |
+| pbi-candidate-terms-70dd | Operator | As the operator of the canonical language, I want a persistent candidate-term layer so that semantic discovery accumulates across runs, cross-source convergence becomes queryable, and promotion into the canonical language is grounded in evidence rather than transient agent judgment. | Proposed | `pbis/pbi-candidate-terms-70dd/prd.md` |
 
 ## PBI Change History
 
