@@ -26,6 +26,7 @@ Candidate terms are **not** canonical concepts. They are a modeling memory layer
 - Canonical concepts should be source-neutral.
 - Promotion should minimize source-specific leakage.
 - Deferral is a valid and expected outcome.
+- **Promotion is placement, not just labeling.** A candidate cannot become a canonical concept without an explicit semantic relationship to the existing concept tree. No orphan canonical concepts.
 
 ## Problem Statement
 
@@ -66,6 +67,7 @@ The architectural contradiction: a skill meant to operate over accumulated cross
 8. **Q8 diagnostic** — partitions undermapped terms across the six lifecycle states (never-seen, candidate, deferred, merged, rejected, promoted). Drives Check 2 of reconcile-canonical-language.
 9. **Obsolete sweep** — separate maintenance pass. Transitions deferred candidates to `obsolete` when all observations reference superseded source vocabulary versions. Not bundled into Phase 2.
 10. **Promotion heuristic** (informally encoded for v1; see Open Questions for hardening): a candidate may be promoted when it appears across ≥2 source systems OR is clearly part of a widely understood domain vocabulary; its meaning is stable across contexts; it maps cleanly into a canonical role; it removes source-specific noise; and it improves downstream interpretability.
+11. **Semantic placement is required for promotion.** A candidate's `resolved_concept_key` must reference a `core_semantics.canonical_concepts` row whose placement is explicit — for v1, that means `parent_concept_id IS NOT NULL`. This is a hard application-layer gate inside `promote_term_mappings.py`, not a heuristic. Promotion of a new top-level root concept (placement = none) requires an explicit operator override flag and a non-empty `evaluation_notes` rationale. The schema already supports `parent_concept_id` (subtype_of); richer relationship kinds (`equivalent_to`, `part_of`, `related_to`) are out of scope for v1 and tracked as Open Question 4.
 
 ## Parallel Execution Waves
 
@@ -95,6 +97,7 @@ The architectural contradiction: a skill meant to operate over accumulated cross
 10. Obsolete sweep correctly transitions deferred candidates whose observations reference no `is_current` version.
 11. No deletion of candidate or observation rows under any normal operation.
 12. Two health systems have been run end-to-end through the candidate-terms pipeline (Phase 1 + Phase 2). The resulting candidate-set partition by `cross_source_count` is captured in the Task 9 PR description, and any cross-source convergence (or absence thereof) is documented with the queries used to verify.
+13. `promote_term_mappings.py` enforces semantic placement at the application layer: a candidate cannot transition to `status='promoted'` unless its `resolved_concept_key` references a canonical concept with `parent_concept_id IS NOT NULL`, OR an explicit `--allow-root` flag (or equivalent) is supplied with operator-authored justification in `evaluation_notes`. The CHECK constraint complements but does not replace this gate.
 
 ## Dependencies
 
@@ -107,9 +110,10 @@ The architectural contradiction: a skill meant to operate over accumulated cross
 
 ## Open Questions
 
-1. **Promotion criteria precision.** The "≥2 source systems OR widely understood" heuristic is currently informal. Should the promotion script encode this as a hard gate, or surface it as a recommendation that requires operator approval? Settled answer needed before Task 4 implementation.
+1. **Promotion criteria precision.** The "≥2 source systems OR widely understood" heuristic is currently informal. Should the promotion script encode this as a hard gate, or surface it as a recommendation that requires operator approval? Settled answer needed before Task 4 implementation. Note: the **semantic-placement** half of promotion is settled — it is a hard gate (Technical Approach #11, Acceptance Criterion #13). Only the cross-source-count side remains open.
 2. **What constitutes "the same candidate" for dedup?** When `record_candidate_terms.py` sees `"Cardiology"` in source A and `"Cardiology"` in source B, it should attach both observations to the same candidate. But what about `"Cardiology Services"` vs `"Cardiology"`? Recommendation for v1: exact normalized-string match only, with merge as the explicit operator action for fuzzy matches. Confirm before Task 3 implementation.
 3. **Operator review surface.** Q8 plus diagnostic queries vs. eventual UI? Out of scope for v1, but flag for downstream PBI consideration.
+4. **Richer relationship kinds.** v1 enforces semantic placement via `parent_concept_id` only (subtype_of). Relationship kinds beyond that — `equivalent_to`, `part_of`, `related_to` — would require a `core_semantics.canonical_concept_relationships` table (or similar) and are not in this PBI's scope. Spin out as a follow-on PBI (working name: `pbi-canonical-relationships`) if/when downstream querying or inference needs them.
 
 ## Control-Plane Links
 
