@@ -154,27 +154,6 @@ Create a small cleanup PBI (or a single follow-up task on the pbi-trig-contract-
 
 Update this handoff to `Resolved` when the YAML and DB are scrubbed.
 
-### Recommended Cadence
-
-This handoff is the cleanest one-shot among the four follow-ups (smallest blast radius, lowest design uncertainty, no API or CLI surface change). It does not gate any imminent launch — PR #70 already absorbs the pain — so it is appropriate to defer rather than displace higher-priority work.
-
-Recommended trigger: if this handoff is still `Open` two weeks after `2026-04-26` (i.e., on or after `2026-05-10`), schedule a fresh background agent to open the cleanup PR. A reasonable agent prompt:
-
-> Open a PR against `crypto-trading-engine` `main` that implements `pbi-launch-apr-22` handoff-003: scrub the six deprecated `economics_guard_*` keys from `configs/guardrails/global.yaml` (defaults section), insert a new active version of `live_execution_policy_versions.global-default` with those keys removed from `policy_payload`, and add a check that `set(_GUARDRAIL_FIELDS) == set(load_guardrail_defaults())`. Reference this handoff in the PR description. Keep the diff scoped — do not absorb the validator hardening item (#4) unless trivial; spin it off as a separate handoff if larger.
-
-The cleanup is data + config + a tiny validator check. It should fit in a single small PR with no live-trading risk because the legacy keys are no longer referenced by any code path (PR #70 already proved the system tolerates them). Trigger criterion to skip the schedule: handoff status is `Resolved` or a successor PBI exists.
-
-### Recommended Sequencing Among Sibling Handoffs
-
-For operators sequencing the four open handoffs against each other (priority highest first):
-
-1. **handoff-002** (pair-leg margin preflight) — gates safe re-launch; until this lands, the new failure mode in handoff-001 remains reachable.
-2. **handoff-001** (pair-leg partial-fill resilience) — second-line defense behind handoff-002; reduces blast radius if margin preflight ever misses.
-3. **handoff-003** (this handoff — `economics_guard_*` cleanup) — non-blocking debt; defer to the 2-week trigger above.
-4. **handoff-004** (`start-candidate` CLI ergonomics) — ops-friction fix; can land any time, no functional risk.
-
-Document this ordering in any successor PBIs so prioritization is preserved across sessions.
-
 ---
 
 ## handoff-20260426-153500-004
