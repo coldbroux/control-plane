@@ -12,7 +12,7 @@ This document lists all tasks associated with pbi-candidate-terms-70dd.
 - `repos`:
   - `peddlerr`
 - `created_at`: `2026-04-25 15:21:39`
-- `updated_at`: `2026-04-26 15:50:00`
+- `updated_at`: `2026-04-26 16:05:00`
 
 ## Task Summary
 
@@ -25,7 +25,7 @@ This document lists all tasks associated with pbi-candidate-terms-70dd.
 | 5 | `Obsolete sweep job` (`5.md`) | InReview | Maintenance pass that transitions deferred candidates to `obsolete` when all observations reference superseded source vocabulary versions. |
 | 6 | `reconcile-canonical-language skill update for Q8` (`6.md`) | InReview | Update the skill and slash-command mirror to run Q8 at Check 2 and operate over the accumulated candidate set. |
 | 7 | `Purge Adena-derived canonical language for clean-slate validation` (`7.md`) | InReview | One-shot operator-confirmed reset that removes all Adena-derived canonical-language state (non-seed canonical concepts, mapping definitions, candidate_terms, observations) so Tasks 8 and 9 exercise the new machinery from a true zero state. Source vocabulary preserved. |
-| 8 | `Adena solo through the new pipeline` (`8.md`) | InProgress | First real exercise of the new pipeline: record Adena's vocabulary, walk the skill, make decisions. Expected outcome — canonical tree stays at seed-roots-only because single-source signal cannot justify promotion. |
+| 8 | `Adena solo through the new pipeline` (`8.md`) | InReview | First real exercise of the new pipeline: record Adena's vocabulary, walk the skill, make decisions. Expected outcome — canonical tree stays at seed-roots-only because single-source signal cannot justify promotion. |
 | 9 | `Adena + System B; demonstrate cross-source convergence` (`9.md`) | Proposed | Add System B as the second source. Walk the pipeline again. Every non-seed canonical concept post-execution must trace back to multi-source observations + explicit operator rationale (or document an absence analysis if no convergence is observed). |
 
 ## Notes
