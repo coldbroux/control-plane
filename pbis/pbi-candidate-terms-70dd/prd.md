@@ -10,7 +10,7 @@
 - `repos`:
   - `peddlerr`
 - `created_at`: `2026-04-25 15:21:39`
-- `updated_at`: `2026-04-25 16:05:00`
+- `updated_at`: `2026-04-26 10:00:00`
 
 ## Overview
 
@@ -73,8 +73,9 @@ The architectural contradiction: a skill meant to operate over accumulated cross
 
 - **Wave 0:** Task 1 — schema migration. Blocking for everything downstream.
 - **Wave 1:** Tasks 2, 3, 4, 5, 6 — Q8 diagnostic, recording script, promotion script update, obsolete sweep, skill update. All depend only on the schema and can run in parallel.
-- **Wave 2:** Task 7 — backfill 38 Adena deferrals. Depends on Tasks 1 and 3.
-- **Wave 3:** Tasks 8, 9 — validation. Task 8 covers mechanics and lifecycle correctness against fixtures; Task 9 covers two-system end-to-end behavior against the live canonical language.
+- **Wave 2:** Task 7 — purge Adena-derived canonical language to a clean slate, so Tasks 8 and 9 exercise the new machinery from zero. Depends on Wave 0+1 being merged.
+- **Wave 3:** Task 8 — Adena solo through the new pipeline (first real validation). Expected outcome: the canonical tree stays at seed-roots-only; single-source signal is insufficient to justify promotions.
+- **Wave 4:** Task 9 — Adena + System B; demonstrate cross-source convergence as the actual mechanism by which the canonical language grows. Every non-seed canonical concept post-execution must trace back to multi-source observations + explicit operator rationale.
 
 ## UX/UI Considerations
 
@@ -93,11 +94,12 @@ The architectural contradiction: a skill meant to operate over accumulated cross
 6. `promote_term_mappings.py` writes lifecycle transitions for every candidate it reasons about during Phase 2, with `evaluation_notes` populated on each transition.
 7. Q8 partitions Phase 2's undermapped term set into the six lifecycle states and surfaces prior `evaluation_notes` for already-evaluated candidates.
 8. The reconcile-canonical-language skill runs Q8 at the start of Check 2 and operates over the accumulated candidate set, not just the current run's terms.
-9. The 38 Adena deferrals from `pbi-research-orch-2e0b` Task 8 are backfilled as `status='deferred'` candidates with one observation each; cross-source count is 1 for all.
+9. Task 7 purges all Adena-derived canonical-language state (non-seed canonical concepts, mapping definitions, candidate_terms, candidate_term_observations) so that Adena and System B enter Tasks 8 and 9 from identical zero-state pre-conditions. Source vocabulary tables (`source_vocabulary_models`, `vocabulary_surfaces`, `vocabulary_terms`, `semantic_model_versions`) are preserved.
 10. Obsolete sweep correctly transitions deferred candidates whose observations reference no `is_current` version.
-11. No deletion of candidate or observation rows under any normal operation.
-12. Two health systems have been run end-to-end through the candidate-terms pipeline (Phase 1 + Phase 2). The resulting candidate-set partition by `cross_source_count` is captured in the Task 9 PR description, and any cross-source convergence (or absence thereof) is documented with the queries used to verify.
-13. `promote_term_mappings.py` enforces semantic placement at the application layer: a candidate cannot transition to `status='promoted'` unless its `resolved_concept_key` references a canonical concept with `parent_concept_id IS NOT NULL`, OR an explicit `--allow-root` flag (or equivalent) is supplied with operator-authored justification in `evaluation_notes`. The CHECK constraint complements but does not replace this gate.
+11. No deletion of candidate or observation rows under any normal pipeline operation. Task 7's reset is an explicit, one-shot, operator-confirmed exception used only at the start of validation.
+12. Task 8 runs Adena solo through the new pipeline. Post-Task-8 the canonical tree remains at seed-roots-only — any new canonical concept must have documented `--allow-root` rationale. All non-`candidate`-status `candidate_terms` rows have non-empty `evaluation_notes`.
+13. Task 9 runs Adena + System B through the pipeline together. Every non-seed canonical concept post-Task-9 satisfies the provenance criterion: there exists a `candidate_terms` row with that `concept_key` as `resolved_concept_key`, with non-empty `evaluation_notes`, AND with ≥2 observations from distinct source systems (or, if `--allow-root` was used, an explicit and documented operator rationale). If no convergence is observed, an absence analysis with normalization / pair-selection recommendations is documented instead.
+14. `promote_term_mappings.py` enforces semantic placement at the application layer: a candidate cannot transition to `status='promoted'` unless its `resolved_concept_key` references a canonical concept with `parent_concept_id IS NOT NULL`, OR an explicit `--allow-root` flag (or equivalent) is supplied with operator-authored justification in `evaluation_notes`. The CHECK constraint complements but does not replace this gate.
 
 ## Dependencies
 
