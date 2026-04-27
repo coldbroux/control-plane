@@ -7,6 +7,7 @@ This file is an append-only log of PBIs that touch this repo.
 | Timestamp | PBI ID | Title | Repos |
 |---|---|---|---|
 | 2026-04-25 15:21:39 | pbi-candidate-terms-70dd | Candidate Terms — A Memory Layer for Semantic Discovery | peddlerr |
+| 2026-04-26 17:30:00 | pbi-cp-commit-rules-76db | Require Stage-and-Commit Discipline for Control-Plane Writes | cad-lab, crypto-trading-engine, peddlerr |
 
 ## Notes
 
